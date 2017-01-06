@@ -16,6 +16,52 @@ class Topic:
             total += session.get_duration()
             
         return total
+
+    def convert_seconds_for_display(self, total):
+        response = []
+        response_string = ""
+        days = total // 86400
+        total = total % 86400
+        hours = total // 3600
+        total = total % 3600
+        minutes = total // 60
+        seconds = total % 60
+
+        if days > 0:
+            if days == 1:
+                response.append("{} day".format(int(days)))
+            else:
+                response.append("{} days".format(int(days)))
+        if hours > 0:
+            if hours == 1:
+                response.append("{} hour".format(int(hours)))
+            else:
+                response.append("{} hours".format(int(hours)))
+ 
+        if minutes > 0:
+            if minutes == 1:
+                response.append("{} minute".format(int(minutes)))
+            else:
+                response.append("{} minutes".format(int(minutes)))
+        if seconds > 0:
+            if seconds == 1:
+                response.append("{} second".format(int(seconds)))
+            else:
+                response.append("{} seconds".format(int(seconds)))
+
+        if len(response) == 0:
+            return "0 seconds"
+        else:
+            for i in range(len(response)):
+                if (i == (len(response) - 1)) and (len(response) > 1) :
+                    response_string += "and {}.".format(response[i])
+                elif len(response) < 3:
+                    response_string += "{} ".format(response[i])
+                else:
+                    #
+                    response_string += "{}, ".format(response[i])
+            return response_string
+ 
     
     def get_average(self):
         total = 0
@@ -34,8 +80,9 @@ class Topic:
    
     def __str__(self):
         #think about this one when you need it
-        return " {}  |  Hours This Week: {}  |  Avg. Per Week: {}".format(self.__topic_name,
-                                                                         self.get_this_weeks_total(), self.get_average())
+        return " {}  |  Time Invested This Week: {}  |  Avg. Per Week: {}".format(self.__topic_name,
+                                                                         self.convert_seconds_for_display(self.get_this_weeks_total()),
+                                                                         self.convert_seconds_for_display(self.get_average()))
     
     def start_new_week(self):
         self.__weeks.append(self.current_week)
