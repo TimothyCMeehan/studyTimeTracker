@@ -85,7 +85,7 @@ class Topic:
                                                                          self.convert_seconds_for_display(self.get_average()))
     
     def start_new_week(self):
-        self.__weeks.append(self.current_week)
+        self.__weeks.append(self.__current_week)
         self.__current_week = []
         self.__week_number += 1
 

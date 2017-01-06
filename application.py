@@ -40,7 +40,8 @@ class Application:
         '''
         self.__submenu = tkinter.Menu(self.__menu)
         self.__menu.add_cascade(label='Topic', menu=self.__submenu)
-        self.__submenu.add_command(label='Create New Topic', command=self.add_topic) 
+        self.__submenu.add_command(label='Create New Topic', command=self.add_topic)
+        self.__submenu.add_command(label='Start New Week', command=self.start_new_week)
         self.__submenu.add_command(label='Delete Topic', command=self.delete_topic)
 
         '''
@@ -85,13 +86,18 @@ class Application:
         pack frame
         '''
         frame = tkinter.Frame(self.__window)
-        self.__delete_button = tkinter.Button(
-            frame, text='Delete Class', state='disabled', anchor=tkinter.W, command=self.delete_topic)
+        subframe = tkinter.Frame(frame)
+        self.__new_week_button = tkinter.Button(
+            subframe, text='Start New Week', state='disabled', anchor=tkinter.W, command=self.start_new_week)
+        #self.__delete_button = tkinter.Button(
+ #           frame, text='Delete Class', state='disabled', anchor=tkinter.W, command=self.delete_topic)
         self.__start_button = tkinter.Button(
             frame, text='Start Session', state='disabled', anchor=tkinter.W, command=self.start_session)
         self.__stop_button = tkinter.Button(
             frame, text='Stop Session', state='disabled', anchor=tkinter.W, command=self.stop_session)
-        self.__delete_button.pack(side='left')
+        self.__new_week_button.pack()
+        subframe.pack()
+ #       self.__delete_button.pack(side='left')
         self.__start_button.pack(side='right')
         self.__stop_button.pack(side='right')
         frame.pack()
@@ -99,8 +105,9 @@ class Application:
     def on_select(self, e):
         self.__selected_index = int(self.__topic_list.curselection()[0])
         self.__selected_topic = self.__topics[self.__selected_index]
-        self.__delete_button['state'] = 'normal'
+ #       self.__delete_button['state'] = 'normal'
         self.__start_button['state'] = 'normal'
+        self.__new_week_button['state'] = 'normal'
 
     def exit_commands(self):
             print(self.__topic_name.get())
@@ -119,7 +126,7 @@ class Application:
     def delete_topic(self):
         self.__topic_list.delete(self.__selected_index)
         del self.__topics[self.__selected_index]
-        self.__delete_button['state'] = 'disable'
+ #       self.__delete_button['state'] = 'disable'
         self.__start_button['state'] = 'disable'
 
     def start_session(self):
@@ -131,6 +138,11 @@ class Application:
         self.__selected_topic.end_session()
         self.__start_button['state'] = 'normal'
         self.__stop_button['state'] = 'disable'
+        self.__topic_list.delete(self.__selected_index)
+        self.__topic_list.insert(self.__selected_index, self.__selected_topic)
+
+    def start_new_week(self):
+        self.__selected_topic.start_new_week()
         self.__topic_list.delete(self.__selected_index)
         self.__topic_list.insert(self.__selected_index, self.__selected_topic)
 
