@@ -1,4 +1,5 @@
-import tkinter
+import tkinter as tk
+import tkinter.simpledialog as tksd
 import topic
 import pickle
 
@@ -17,20 +18,20 @@ class Application:
         '''
         build the gui for the application and title it Class Manager
         '''
-        self.__window = tkinter.Tk()
+        self.__window = tk.Tk()
         self.__window.title('Class Manager')
 
         '''
         add drop down menus for the application
         create tkinter menu and link it to the GUI using config
         '''
-        self.__menu = tkinter.Menu(self.__window)
+        self.__menu = tk.Menu(self.__window)
         self.__window.config(menu=self.__menu)
 
         '''
         create File submenu with Load and Save commands
         '''
-        self.__submenu = tkinter.Menu(self.__menu)
+        self.__submenu = tk.Menu(self.__menu)
         self.__menu.add_cascade(label='File', menu=self.__submenu)
         self.__submenu.add_command(label='Save Topics', command=self.save_info) 
         self.__submenu.add_command(label='Load Topics', command=self.load_info)
@@ -38,9 +39,9 @@ class Application:
         '''
         create Topic submenu with Create and Delete commands
         '''
-        self.__submenu = tkinter.Menu(self.__menu)
+        self.__submenu = tk.Menu(self.__menu)
         self.__menu.add_cascade(label='Topic', menu=self.__submenu)
-        self.__submenu.add_command(label='Create New Topic', command=self.add_topic)
+        self.__submenu.add_command(label='Create New Topic', command=self.add_new_topic)
         self.__submenu.add_command(label='Start New Week', command=self.start_new_week)
         self.__submenu.add_command(label='Delete Topic', command=self.delete_topic)
 
@@ -54,11 +55,11 @@ class Application:
         pack all contents into frame and pack frame
         '''
         
-        self.__name = tkinter.StringVar()
-        frame = tkinter.Frame(self.__window)
-        label = tkinter.Label(frame, text="Class Name", width=15, anchor=tkinter.W)
-        entry = tkinter.Entry(frame, textvariable=self.__name, width=30)
-        self.__add_button = tkinter.Button(frame, text='Add Class', anchor=tkinter.W, command=self.add_topic)
+        self.__name = tk.StringVar()
+        frame = tk.Frame(self.__window)
+        label = tk.Label(frame, text="Class Name", width=15, anchor=tk.W)
+        entry = tk.Entry(frame, textvariable=self.__name, width=30)
+        self.__add_button = tk.Button(frame, text='Add Class', anchor=tk.W, command=self.add_topic)
 
         label.pack(side='left')
         self.__add_button.pack(side='right')
@@ -72,8 +73,8 @@ class Application:
         specify functionality of listbox
         pack listbox to frame and pack frame
         '''
-        frame = tkinter.Frame(self.__window)
-        self.__topic_list = tkinter.Listbox(frame, width=120, selectmode=tkinter.SINGLE)
+        frame = tk.Frame(self.__window)
+        self.__topic_list = tk.Listbox(frame, width=120, selectmode=tk.SINGLE)
         self.__topic_list.bind('<<ListboxSelect>>', self.on_select)
         self.__topic_list.pack()
         frame.pack()
@@ -85,16 +86,16 @@ class Application:
         pack buttons to frame
         pack frame
         '''
-        frame = tkinter.Frame(self.__window)
-        subframe = tkinter.Frame(frame)
-        self.__new_week_button = tkinter.Button(
-            subframe, text='Start New Week', state='disabled', anchor=tkinter.W, command=self.start_new_week)
+        frame = tk.Frame(self.__window)
+        subframe = tk.Frame(frame)
+        self.__new_week_button = tk.Button(
+            subframe, text='Start New Week', state='disabled', anchor=tk.W, command=self.start_new_week)
         #self.__delete_button = tkinter.Button(
- #           frame, text='Delete Class', state='disabled', anchor=tkinter.W, command=self.delete_topic)
-        self.__start_button = tkinter.Button(
-            frame, text='Start Session', state='disabled', anchor=tkinter.W, command=self.start_session)
-        self.__stop_button = tkinter.Button(
-            frame, text='Stop Session', state='disabled', anchor=tkinter.W, command=self.stop_session)
+ #           frame, text='Delete Class', state='disabled', anchor=tk.W, command=self.delete_topic)
+        self.__start_button = tk.Button(
+            frame, text='Start Session', state='disabled', anchor=tk.W, command=self.start_session)
+        self.__stop_button = tk.Button(
+            frame, text='Stop Session', state='disabled', anchor=tk.W, command=self.stop_session)
         self.__new_week_button.pack()
         subframe.pack()
  #       self.__delete_button.pack(side='left')
@@ -109,19 +110,19 @@ class Application:
         self.__start_button['state'] = 'normal'
         self.__new_week_button['state'] = 'normal'
 
-    def exit_commands(self):
-            print(self.__topic_name.get())
-            t = topic.Topic(self.__topic_name.get())
-            self.__topics.append(t)
-            self.__topic_list.insert(tkinter.END, str(t))
-            self.__topic_name.set("")
-            self.__add_window.destroy()
-
     def add_topic(self):
         t = topic.Topic(self.__name.get())
         self.__topics.append(t)
-        self.__topic_list.insert(tkinter.END, str(t))
+        self.__topic_list.insert(tk.END, str(t))
         self.__name.set("")
+
+    def add_new_topic(self):
+        name = tksd.askstring('New Class', 'Enter Class Name')
+        t = topic.Topic(name)
+        self.__topics.append(t)
+        self.__topic_list.insert(tk.END, str(t))
+        self.__name.set("")
+
 
     def delete_topic(self):
         self.__topic_list.delete(self.__selected_index)
@@ -157,7 +158,7 @@ class Application:
             self.__topics = pickle.load(file)
             file.close()
             for topic in self.__topics:
-                self.__topic_list.insert(tkinter.END, str(topic))
+                self.__topic_list.insert(tk.END, str(topic))
             
         except:
             print("file error")
