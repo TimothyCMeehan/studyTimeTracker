@@ -44,6 +44,15 @@ class Application:
         self.__submenu.add_command(label='Create New Topic', command=self.add_new_topic)
         self.__submenu.add_command(label='Start New Week', command=self.start_new_week)
         self.__submenu.add_command(label='Delete Topic', command=self.delete_topic)
+        
+        '''
+        create Session submenu with Start and Stop commands
+        '''
+        self.__submenu = tk.Menu(self.__menu)
+        self.__menu.add_cascade(label='Session', menu=self.__submenu)
+        self.__submenu.add_command(label='Start Session', command=self.start_session)
+        self.__submenu.add_command(label='Stop Session', command=self.stop_session)
+        self.__submenu.add_command(label='Manually Enter Session', command=self.enter_session)
 
         '''
         add entry textbox to allow user to enter new topic
@@ -139,6 +148,12 @@ class Application:
         self.__selected_topic.end_session()
         self.__start_button['state'] = 'normal'
         self.__stop_button['state'] = 'disable'
+        self.__topic_list.delete(self.__selected_index)
+        self.__topic_list.insert(self.__selected_index, self.__selected_topic)
+
+    def enter_session(self):
+        minutes = tksd.askinteger('New Session', 'Enter Session Time In Minutes')
+        self.__selected_topic.start_new_session(minutes)
         self.__topic_list.delete(self.__selected_index)
         self.__topic_list.insert(self.__selected_index, self.__selected_topic)
 

@@ -81,16 +81,16 @@ class Topic:
     def __str__(self):
         #think about this one when you need it
         return " {}  |  Time Invested This Week: {}  |  Avg. Per Week: {}".format(self.__topic_name,
-                                                                         self.convert_seconds_for_display(self.get_this_weeks_total()),
-                                                                         self.convert_seconds_for_display(self.get_average()))
+                                        self.convert_seconds_for_display(self.get_this_weeks_total()),
+                                        self.convert_seconds_for_display(self.get_average()))
     
     def start_new_week(self):
         self.__weeks.append(self.__current_week)
         self.__current_week = []
         self.__week_number += 1
 
-    def start_new_session(self):
-        s = session.Session()
+    def start_new_session(self, minutes=0):
+        s = session.Session(minutes)
         self.__current_week.append(s)
 
     def end_session(self):

@@ -1,9 +1,15 @@
 import time
 
 class Session:
-    def __init__(self):
-        self.__start_time = time.localtime() #get the time
-        self.__end_time = 0
+    def __init__(self, minutes=0):
+        if (minutes == 0):
+            self.__start_time = time.localtime() #get the time
+            self.__end_time=0
+        else:
+            self.__end_time = time.localtime()
+            seconds = minutes * 60
+            start_seconds = time.mktime(self.__end_time) - seconds
+            self.__start_time = time.localtime(start_seconds)
 
     def __str__(self):
         if (self.__end_time == 0):
